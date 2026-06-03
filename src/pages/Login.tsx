@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-form'; // Note: using react-hook-form later, wait let me write it correctly
+
 import { supabase } from '../lib/supabase';
 import { useAuthStore } from '../store/authStore';
 import { LogIn, Lock, Mail } from 'lucide-react';
