@@ -75,7 +75,7 @@ export default function PresensiMasuk() {
   };
 
   return (
-    <SiswaLayout>
+    <div>
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
         <div className="bg-primary-600 p-4 text-white text-center">
           <h2 className="font-bold text-lg">Presensi Masuk</h2>
@@ -179,6 +179,6 @@ export default function PresensiMasuk() {
           </button>
         </div>
       </div>
-    </SiswaLayout>
+    </div>
   );
 }

@@ -4,6 +4,12 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import SiswaDashboard from './pages/siswa/SiswaDashboard';
 import PresensiMasuk from './pages/siswa/PresensiMasuk';
 import PresensiPulang from './pages/siswa/PresensiPulang';
+import AdminLayout from './components/AdminLayout';
+import SiswaLayout from './components/SiswaLayout';
+import DataSiswa from './pages/admin/DataSiswa';
+import DataKelas from './pages/admin/DataKelas';
+import DataLokasi from './pages/admin/DataLokasi';
+import RiwayatPresensi from './pages/admin/RiwayatPresensi';
 import { useAuthStore } from './store/authStore';
 import { useEffect } from 'react';
 import { supabase } from './lib/supabase';
@@ -69,29 +75,27 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         
-        <Route path="/admin/*" element={
+        <Route path="/admin" element={
           <ProtectedRoute allowedRole="admin">
-            <AdminDashboard />
+            <AdminLayout />
           </ProtectedRoute>
-        } />
+        }>
+          <Route index element={<AdminDashboard />} />
+          <Route path="siswa" element={<DataSiswa />} />
+          <Route path="kelas" element={<DataKelas />} />
+          <Route path="lokasi" element={<DataLokasi />} />
+          <Route path="riwayat" element={<RiwayatPresensi />} />
+        </Route>
         
-        <Route path="/siswa/*" element={
+        <Route path="/siswa" element={
           <ProtectedRoute allowedRole="siswa">
-            <SiswaDashboard />
+            <SiswaLayout />
           </ProtectedRoute>
-        } />
-
-        <Route path="/siswa/presensi/masuk" element={
-          <ProtectedRoute allowedRole="siswa">
-            <PresensiMasuk />
-          </ProtectedRoute>
-        } />
-
-        <Route path="/siswa/presensi/pulang" element={
-          <ProtectedRoute allowedRole="siswa">
-            <PresensiPulang />
-          </ProtectedRoute>
-        } />
+        }>
+          <Route index element={<SiswaDashboard />} />
+          <Route path="presensi/masuk" element={<PresensiMasuk />} />
+          <Route path="presensi/pulang" element={<PresensiPulang />} />
+        </Route>
       </Routes>
     </Router>
   );

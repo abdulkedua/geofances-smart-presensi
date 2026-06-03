@@ -1,4 +1,3 @@
-import SiswaLayout from '../../components/SiswaLayout';
 import { Link } from 'react-router-dom';
 import { MapPin, LogIn, LogOut, CheckCircle } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
@@ -7,7 +6,7 @@ export default function SiswaDashboard() {
   const { user } = useAuthStore();
 
   return (
-    <SiswaLayout>
+    <div>
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
         <div className="flex items-center space-x-4">
           <div className="h-16 w-16 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 font-bold text-2xl">
@@ -61,6 +60,6 @@ export default function SiswaDashboard() {
           Memuat Peta...
         </div>
       </div>
-    </SiswaLayout>
+    </div>
   );
 }

@@ -1,8 +1,6 @@
-import AdminLayout from '../../components/AdminLayout';
-
 export default function AdminDashboard() {
   return (
-    <AdminLayout>
+    <div>
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Dashboard Admin</h2>
         <p className="text-gray-600">Ringkasan data presensi hari ini.</p>
@@ -61,10 +59,10 @@ export default function AdminDashboard() {
         <div className="mt-4 bg-white shadow rounded-lg overflow-hidden">
           {/* Table placeholder */}
           <div className="p-6 text-center text-gray-500">
-            Modul Manajemen Data dan Tabel akan diimplementasikan.
+            Modul Manajemen Data dan Tabel sedang dikembangkan.
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </div>
   );
 }
