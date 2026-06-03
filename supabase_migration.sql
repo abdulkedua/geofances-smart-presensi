@@ -70,39 +70,37 @@ ALTER TABLE public.siswa ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.lokasi_presensi ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.presensi ENABLE ROW LEVEL SECURITY;
 
+-- Fungsi untuk mengecek role admin (Bypass RLS untuk mencegah infinite recursion)
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- Policy untuk users
 CREATE POLICY "Users dapat melihat profil mereka sendiri" ON public.users FOR SELECT USING (auth.uid() = id);
-CREATE POLICY "Admin dapat melihat semua users" ON public.users FOR ALL USING (
-  EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
-);
+CREATE POLICY "Admin dapat melihat semua users" ON public.users FOR ALL USING (public.is_admin());
 
 -- Policy untuk kelas
 CREATE POLICY "Semua orang dapat melihat kelas" ON public.kelas FOR SELECT USING (true);
-CREATE POLICY "Hanya admin dapat mengelola kelas" ON public.kelas FOR ALL USING (
-  EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
-);
+CREATE POLICY "Hanya admin dapat mengelola kelas" ON public.kelas FOR ALL USING (public.is_admin());
 
 -- Policy untuk siswa
-CREATE POLICY "Siswa dapat melihat data siswanya sendiri" ON public.siswa FOR SELECT USING (
-  user_id = auth.uid()
-);
-CREATE POLICY "Admin dapat mengelola semua data siswa" ON public.siswa FOR ALL USING (
-  EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
-);
+CREATE POLICY "Siswa dapat melihat data siswanya sendiri" ON public.siswa FOR SELECT USING (user_id = auth.uid());
+CREATE POLICY "Admin dapat mengelola semua data siswa" ON public.siswa FOR ALL USING (public.is_admin());
 
 -- Policy untuk lokasi_presensi
 CREATE POLICY "Semua orang dapat melihat lokasi presensi" ON public.lokasi_presensi FOR SELECT USING (true);
-CREATE POLICY "Hanya admin dapat mengelola lokasi presensi" ON public.lokasi_presensi FOR ALL USING (
-  EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
-);
+CREATE POLICY "Hanya admin dapat mengelola lokasi presensi" ON public.lokasi_presensi FOR ALL USING (public.is_admin());
 
 -- Policy untuk presensi
 CREATE POLICY "Siswa dapat melihat dan membuat presensinya sendiri" ON public.presensi FOR ALL USING (
   siswa_id IN (SELECT id FROM public.siswa WHERE user_id = auth.uid())
 );
-CREATE POLICY "Admin dapat mengelola semua presensi" ON public.presensi FOR ALL USING (
-  EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
-);
+CREATE POLICY "Admin dapat mengelola semua presensi" ON public.presensi FOR ALL USING (public.is_admin());
 
 -- Konfigurasi Storage untuk Foto Selfie
 -- Pastikan Anda sudah membuat bucket bernama 'selfie' di menu Storage Supabase
