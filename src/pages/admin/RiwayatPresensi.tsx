@@ -50,17 +50,17 @@ export default function RiwayatPresensi() {
       const { data, error } = await query;
       if (error) throw error;
       
-      let filtered = data;
+      let filtered: any[] = (data as any) || [];
       // Filter manually for join tables if selectedKelas exists
       if (selectedKelas) {
-        filtered = filtered.filter(p => p.siswa?.kelas_id === selectedKelas);
+        filtered = filtered.filter((p: any) => p.siswa?.kelas_id === selectedKelas);
       }
-      return filtered;
+      return filtered as any[];
     }
   });
 
   // Handle Search Filtering Client Side
-  const filteredList = presensiList?.filter(p => {
+  const filteredList = (presensiList as any[])?.filter((p: any) => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
     const nama = p.siswa?.users?.nama_lengkap.toLowerCase() || '';
@@ -88,7 +88,7 @@ export default function RiwayatPresensi() {
     const worksheet = XLSX.utils.json_to_sheet(exportData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Presensi');
-    XLSX.writeFile(workbook, \`Data_Presensi_\${selectedDate}.xlsx\`);
+    XLSX.writeFile(workbook, `Data_Presensi_${selectedDate}.xlsx`);
     toast.success('File Excel berhasil diunduh');
   };
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../lib/supabase';
-import { Plus, Edit2, Trash2, Key, Ban, CheckCircle, Search } from 'lucide-react';
+import { Plus, Edit2, Trash2, Key, Search } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -69,23 +69,23 @@ export default function DataSiswa() {
       const { data, error } = await query;
       if (error) throw error;
       
-      let filtered = data;
+      let filtered: any[] = (data as any) || [];
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
-        filtered = data.filter(item => 
+        filtered = filtered.filter((item: any) => 
           item.nis.toLowerCase().includes(q) || 
           item.users?.nama_lengkap.toLowerCase().includes(q)
         );
       }
       
       // Sort by nama
-      filtered.sort((a, b) => {
+      filtered.sort((a: any, b: any) => {
         const nameA = a.users?.nama_lengkap || '';
         const nameB = b.users?.nama_lengkap || '';
         return nameA.localeCompare(nameB);
       });
       
-      return filtered;
+      return filtered as any[];
     }
   });
 
@@ -105,7 +105,7 @@ export default function DataSiswa() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': \`Bearer \${token}\`
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           email: data.email,
@@ -220,7 +220,7 @@ export default function DataSiswa() {
       const token = await getSessionToken();
       const res = await fetch('/api/update-user', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': \`Bearer \${token}\` },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
         body: JSON.stringify({ action: 'reset_password', userId, password: newPassword })
       });
       const data = await res.json();
