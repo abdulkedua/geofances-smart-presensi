@@ -1,7 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Webcam from 'react-webcam';
-import SiswaLayout from '../../components/SiswaLayout';
 import { getDistanceFromLatLonInM } from '../../lib/utils';
 import { MapPin, Camera, Check, X, Loader2 } from 'lucide-react';
 
